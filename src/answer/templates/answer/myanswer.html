@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h1 class="jumbotron" style="text-align: center">Welcome To Q & A site </h1>
+    <style>
+        .list-group a.list-group-item:hover {
+            background-color: #6bb7bb;
+        }
+
+    </style>
+
+    <div class="container-fluid">
+        <h2> Question List Answered By Me </h2>
+        <div class="list-group">
+            {% for answer in object_list %}
+
+                <a href="{% url 'answer:detail' answer.questions.id %}" class="list-group-item">
+                <b>{{ answer.questions.user }}</b>:: &nbsp; {{ answer.questions.title }}
+                </a>
+
+                <a href="{% url 'answer:detail' answer.questions.id %}" class="list-group-item ">
+                   Ans>> {{ answer.user }}:: &nbsp;{{ answer}}</a>
+                <br>
+            {% endfor %}
+        </div>
+    </div>
+
+
+{% endblock %}
