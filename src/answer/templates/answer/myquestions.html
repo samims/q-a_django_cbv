@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %} {% endblock %}
+{% block body %}
+    <div class="container-fluid">
+        <h2>Question List </h2>
+        <div class="list-group">
+            {% for question in view.my_question %}
+                <a href="{% url 'answer:detail' question.pk %}" class="list-group-item "
+                   id="lst">{{ question.title }}</a>
+                {% empty %}
+                <p> You have not asked any question yet.</p>
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}

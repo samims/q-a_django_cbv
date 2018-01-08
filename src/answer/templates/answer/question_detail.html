@@ -1,70 +1,66 @@
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <title>Title</title>#}
-{#</head>#}
-{#<body>#}
-{#<h2>{{question}}</h2>#}
-{#{% for answer in question.answer_set.all %}#}
-{#    <p>{{answer}}  &nbsp; &nbsp; -- answered by    <b>{{answer.user}}</b>     Total upvote {{answer.upvote}} </p>#}
-{#{% endfor %}#}
-{#</body>#}
-{#</html>#}
-
 {% extends 'base.html' %}
 
 {% block title %} {{ question.title }} {% endblock %}
-
+{% load upvote_tags %}
 {% block body %}
     <h3><i>{{ question.title }}</i></h3>
     {{ question.description }}
     {% for answer in question.answer_set.all %}
         <br>
-
         <div>
-            <p>{{ answer.answer_text }} <span style="font-size: 15px">by [{{ answer.user }}]</span></p>
-            <form method="post" action="{% url 'answer:detail' question.id %}">
-                {% csrf_token %}
-                <input type="hidden" name="type" value="vote">
-                <input type="hidden" name="answer_id" value="{{ answer.id }}">
+        <p>{{ answer.answer_text }} <span style="font-size: 15px">by [{{ answer.user }}]</span></p>
+        <form method="post" action="{% url 'answer:detail' question.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="vote">
+            <input type="hidden" name="answer_id" value="{{ answer.id }}">
 
-                {% if user.is_authenticated %}
-                    <input type="submit" class="btn btn-sm btn-success" value="Upvote|{{ answer.upvote}}">
-
+            {% if request.user.is_authenticated %}
+                {% if request.user|has_upvoted:answer %}
+                    <input type="submit" class="btn btn-warning" name='vote' value="Downvote|{{ answer.upvote_set.all.count }}">
                 {% else %}
-                    <input type="submit" disabled='true' class="btn btn-sm btn-warning"
-                           value="Upvote|{{ answer.upvote }}">
+                    <input type="submit" class="btn btn-success" name='vote' value="Upvote|{{ answer.upvote_set.all.count }}">
                 {% endif %}
 
+            {% else %}
+                <input type="submit" class="btn btn-danger" onclick="loginAlert()" value="Upvote|{{ answer.upvote_set.all.count }}">
+            {% endif %}
 
-            </form>
-        </div>
-    {% empty %}
-        <input type="submit" class="btn btn-sm btn-success" value="Upvote|0">
+
+        </form>
 
     {% endfor %}
-    <br>
-    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#answer"><span
-            class="glyphicon glyphicon-pencil"></span> Answer
-    </button>
-    <form action="{% url 'answer:detail' question.id %}" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="type" value="answer">
-        <input type="hidden" name="question_id" value="{{ question.id }}">
-        <div id="answer" class="collapse">
-            <div class="form-horizontal">
-                <div class="form-group">
-                    <div class="col-md-9">
-                                <textarea class="form-control" rows="6" placeholder="Write your answer here"
-                                          required name="write"></textarea>
-                    </div>
+<br>
+<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#answer"><span
+        class="glyphicon glyphicon-pencil"></span> Answer
+</button>
+<form action="{% url 'answer:detail' question.id %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="type" value="answer">
+    <input type="hidden" name="question_id" value="{{ question.id }}">
+    <div id="answer" class="collapse">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-9">
+                    <textarea class="form-control" rows="6" placeholder="Write your answer here"
+                              required name="write"></textarea>
                 </div>
-                <button type="submit" class="btn btn-success">Submit</button>
             </div>
+            <button type="submit" class="btn btn-success">Submit</button>
         </div>
-    </form>
+    </div>
+</form>
+<script>
+</script>
+</div>
     <script>
-    </script>
+        function loginAlert() {
+            alert("Alert! Please Login To Vote");
+            window.location = 'http://127.0.0.1:8000/login/';
 
+        }
+
+        function votedAlert() {
+            alert("Alert! You already upvoted this answer");
+        }
+    </script>
 {% endblock %}

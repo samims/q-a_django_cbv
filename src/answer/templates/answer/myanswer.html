@@ -12,6 +12,7 @@
     <div class="container-fluid">
         <h2> Question List Answered By Me </h2>
         <div class="list-group">
+        {{ request.user }}
             {% for answer in object_list %}
 
                 <a href="{% url 'answer:detail' answer.questions.id %}" class="list-group-item">
@@ -21,7 +22,11 @@
                 <a href="{% url 'answer:detail' answer.questions.id %}" class="list-group-item ">
                    Ans>> {{ answer.user }}:: &nbsp;{{ answer}}</a>
                 <br>
+
+                {% empty %}
+                    <p> You have not answered any!</p>
             {% endfor %}
+
         </div>
     </div>
 

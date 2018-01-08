@@ -20,16 +20,18 @@ class Answer(models.Model):
     questions = models.ForeignKey(Question)
     pub_date = models.DateTimeField(auto_now_add=True)
     # upvote = models.IntegerField(null=True, blank=True)
-
     user = models.ForeignKey(User)
 
     def __str__(self):
         return self.answer_text
 
     def get_absolute_url(self):
-        return reverse('answer:answer_by_me', kwargs={'pk': self.questions})
+        return reverse('answer:answer_by_me', kwargs={'pk': self.user.id})
 
 
 class Upvote(models.Model):
-    questions = models.ForeignKey(Question)
+    user = models.ForeignKey(User)
     answers = models.ForeignKey(Answer)
+
+    def __str__(self):
+        return self.user.username

@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="#" class="navbar-brand">MySite</a>
+            <a href="{% url 'answer:home' %}" class="navbar-brand">MySite</a>
         </div>
 
         <div class="collapse navbar-collapse" id="mainNavBar">
@@ -21,12 +21,12 @@
                             class="caret"></span> </a>
                     <ul class="dropdown-menu">
                         {% if user.is_authenticated %}
-                        <li><a href="#">Asked by Me</a></li>
-                        <li><a href="{% url 'answer:answer_by_me' pk=user.pk %}">Answered by me</a></li>
-                        <li><a href="#">Upvoted ans by me</a></li>
+                            <li><a href="{% url 'answer:my_questions' pk=request.user.pk %}">My Questions</a></li>
+                            <li><a href="{% url 'answer:my_answers' %}">My Answers</a></li>
+                            <li><a href="{% url 'answer:my_upvotes' %}">My Upvotes</a></li>
                         {% endif %}
-                        <li><a href="#">Question of the hour</a></li>
-                        <li><a href="#">Question of the site</a></li>
+                        <li><a href="{% url 'answer:question_of_the_hour' %}">Question of the hour</a></li>
+                        <li><a href="{% url 'answer:question_of_the_site' %}">Question of the site</a></li>
                     </ul>
                 </li>
             </ul>
@@ -34,15 +34,15 @@
 
             <div class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
-                <li><a href="#">{{ user }} Logout <span
-                        class=" glyphicon glyphicon-log-out"></span></a></li>
+                    <li>{{ user }}<a href="{% url 'logout' %}"> Logout <span
+                            class=" glyphicon glyphicon-log-out"></span></a></li>
                 {% else %}
 
-                <li><a href="#">SignUp <span
-                        class=" glyphicon glyphicon-registration-mark"></span></a></li>
+                    <li><a href="#">SignUp <span
+                            class=" glyphicon glyphicon-registration-mark"></span></a></li>
 
-                <li><a href="#">Login <span
-                        class=" glyphicon glyphicon-log-in"></span></a></li>
+                    <li><a href="{% url 'login' %}">Login <span
+                            class=" glyphicon glyphicon-log-in"></span></a></li>
                 {% endif %}
             </div>
         </div>

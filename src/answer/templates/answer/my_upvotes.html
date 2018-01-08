@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %} {% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        {% for upvote in view.my_upvotes %}
+            <a href="{% url 'answer:detail' upvote.answers.questions.pk %}"
+               class="list-group-item">{{ upvote.answers }}</a>
+        {% empty %}
+            <p>You have not upvoted any anwer yet.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
